@@ -5,6 +5,7 @@ import { InversifyExpressServer } from "inversify-express-utils";
 import "./config/env";
 import TYPES from "./constants/types";
 import "./controllers/home.controller";
+import "./controllers/products.controller";
 import {DbConnection} from "./db/utils/connection.db";
 import { HomeService } from "./services/home.service";
 import {ProductsService} from "./services/products.service";
@@ -28,7 +29,7 @@ server.setConfig((app) => {
 const serverInstance = server.build();
 serverInstance.listen(process.env.PORT);
 
-process.env.DB_CONN_STR = `http://${process.env.DB_IP}:${process.env.DB_PORT}`;
+process.env.DB_CONN_STR = `mongodb://${process.env.DB_IP}:${process.env.DB_PORT}/${process.env.DB_DB_NAME}`;
 const mongod = new MongoMemoryServer({instance: {
         dbName: process.env.DB_DB_NAME,
         ip: process.env.DB_IP,

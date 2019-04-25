@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 
 export class DbConnection {
+    private static CONNSTR: string;
 
     public static initConnection(connStr: string) {
-        this.connect(connStr);
-        mongoose.connection.on("disconnected", DbConnection.connect);
+        this.CONNSTR = connStr;
+        this.connect(this.CONNSTR);
+        mongoose.connection.on("disconnected", () => DbConnection.connect(this.CONNSTR));
     }
 
     private static connect(connStr: string) {

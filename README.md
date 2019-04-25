@@ -1,0 +1,1 @@
+# Product Inventory using Inversify, Mongoose, TypeScript & Webpack

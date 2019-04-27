@@ -9,7 +9,7 @@ export class DbConnection {
         mongoose.connection.on("disconnected", () => DbConnection.connect(this.CONNSTR));
     }
 
-    private static connect(connStr: string) {
+    public static connect(connStr: string) {
         mongoose.connect(
             connStr,
             {useNewUrlParser: true},
@@ -21,5 +21,9 @@ export class DbConnection {
                 console.error("Error connecting to database: ", error);
                 return process.exit(1);
             });
+    }
+
+    public static async disconnect() {
+       await mongoose.connection.close();
     }
 }

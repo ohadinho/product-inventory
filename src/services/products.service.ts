@@ -1,5 +1,5 @@
 import {injectable} from "inversify";
-import {Error} from "mongoose";
+import {Error, default as mongoose} from "mongoose";
 import Product, {IProduct} from "../db/models/product.db.model";
 
 @injectable()
@@ -24,7 +24,7 @@ export class ProductsService {
             });
     }
 
-    public async createProduct(product: IProduct): Promise<IProduct> {
+    public async createProduct(product: any): Promise<IProduct> {
         return Product.create(product)
             .then((data: IProduct) => {
                 return data;
@@ -34,8 +34,8 @@ export class ProductsService {
             });
     }
 
-    public async updateProduct(id: number, product: IProduct): Promise<IProduct> {
-        return Product.findOneAndUpdate({id}, product, {new: true})
+    public async updateProduct(id: string, product: any): Promise<IProduct> {
+        return Product.findOneAndUpdate({id: new mongoose.Types.ObjectId(id)}, product, {new: true})
             .then((data: IProduct) => {
                 return data;
             })

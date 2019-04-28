@@ -4,6 +4,7 @@ import {config} from "dotenv";
 import MongoMemoryServer from "mongodb-memory-server-core/lib/MongoMemoryServer";
 import "jest";
 import {DbConnection} from "../db/utils/connection.db";
+import Product from "../db/models/product.db.model";
 
 describe("Products service", async () => {
     beforeAll(async () => {
@@ -31,6 +32,13 @@ describe("Products service", async () => {
             quantity: 2,
         };
 
+        const mockSpy = jest.spyOn(Product, "create");
+        mockSpy.mockImplementation((product) => {
+            return new Promise((resolve, reject) => {
+                product.id = "mockid";
+                process.nextTick(() => { resolve(product); });
+            });
+        });
         const created = await productService.createProduct(productToCreate);
         expect(created.id).not.toEqual("");
         expect(created.id).not.toBeNull();

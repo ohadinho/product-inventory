@@ -14,8 +14,8 @@ export class ProductsService {
             });
     }
 
-    public async getProduct(id: number): Promise<IProduct[]> {
-        return Product.find({id})
+    public async getProduct(id: string): Promise<IProduct[]> {
+        return Product.find({_id: id})
             .then((data: IProduct[]) => {
                 return data;
             })
@@ -35,7 +35,7 @@ export class ProductsService {
     }
 
     public async updateProduct(id: string, product: any): Promise<IProduct> {
-        return Product.findOneAndUpdate({id: new mongoose.Types.ObjectId(id)}, product, {new: true})
+        return Product.findOneAndUpdate({_id: id}, product, {new: true})
             .then((data: IProduct) => {
                 return data;
             })
@@ -44,9 +44,9 @@ export class ProductsService {
             });
     }
 
-    public async deleteProduct(id: number): Promise<boolean> {
-        return Product.findOneAndDelete({id})
-            .then((data: any) => {
+    public async deleteProduct(id: string): Promise<boolean> {
+        return Product.findOneAndDelete({_id: id})
+            .then(() => {
                 return true;
             })
             .catch((error: Error) => {

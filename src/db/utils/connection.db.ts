@@ -3,16 +3,16 @@ import mongoose from "mongoose";
 export class DbConnection {
     private static CONNSTR: string;
 
-    public static initConnection(connStr: string) {
-        this.CONNSTR = connStr;
-        this.connect(this.CONNSTR);
-        mongoose.connection.on("disconnected", () => DbConnection.connect(this.CONNSTR));
+    public static async initConnection(connStr: string) {
+        DbConnection.CONNSTR = connStr;
+        await DbConnection.connect(this.CONNSTR);
+        mongoose.connection.on("disconnected", () => DbConnection.connect(DbConnection.CONNSTR));
     }
 
-    public static connect(connStr: string) {
-        mongoose.connect(
+    public static async connect(connStr: string) {
+       return mongoose.connect(
             connStr,
-            {useNewUrlParser: true},
+            {useNewUrlParser: true, useFindAndModify: false},
         )
             .then(() => {
                 console.log(`Successfully connected to ${connStr}`);

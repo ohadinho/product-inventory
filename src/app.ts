@@ -8,7 +8,7 @@ import {DbConnection} from "./db/utils/connection.db";
 import {DbMock} from "./tests/utils/dbmock";
 import {ContainerConfigLoader} from "./config/container";
 
-// Load config
+// Load process.env config
 ProcessConfigLoader.Load("/dist/.env");
 
 // load everything needed to the Container

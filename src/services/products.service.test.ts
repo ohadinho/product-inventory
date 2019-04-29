@@ -4,20 +4,13 @@ import MongoMemoryServer from "mongodb-memory-server-core/lib/MongoMemoryServer"
 import "jest";
 import {DbConnection} from "../db/utils/connection.db";
 import Product, {IProduct} from "../db/models/product.db.model";
+import {DbMock} from "../tests/utils/dbmock";
 
 describe("Products service", async () => {
     let mongod: MongoMemoryServer;
 
     beforeAll(async () => {
-        process.env.DB_CONN_STR = `mongodb://${process.env.DB_IP}:${process.env.DB_PORT}/${process.env.DB_DB_NAME}`;
-        mongod = new MongoMemoryServer({
-            instance: {
-                dbName: process.env.DB_DB_NAME,
-                ip: process.env.DB_IP,
-                port: parseInt(process.env.DB_PORT, 10),
-            },
-        });
-
+        mongod = DbMock.initDbMock();
         const uri = await mongod.getUri();
         await DbConnection.connect(uri);
     });

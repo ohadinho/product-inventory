@@ -1,12 +1,10 @@
 import mongoose from "mongoose";
 
 export class DbConnection {
-    private static CONNSTR: string;
-
-    public static async initConnection(connStr: string) {
-        DbConnection.CONNSTR = connStr;
-        await DbConnection.connect(this.CONNSTR);
-        mongoose.connection.on("disconnected", () => DbConnection.connect(DbConnection.CONNSTR));
+    public static async initConnection() {
+        process.env.DB_CONN_STR = `mongodb://${process.env.DB_IP}:${process.env.DB_PORT}/${process.env.DB_DB_NAME}`;
+        await DbConnection.connect(process.env.DB_CONN_STR);
+        mongoose.connection.on("disconnected", () => DbConnection.connect(process.env.DB_CONN_STR));
     }
 
     public static async connect(connStr: string) {

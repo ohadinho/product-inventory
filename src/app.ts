@@ -10,6 +10,7 @@ import {DbConnection} from "./db/utils/connection.db";
 import { HomeService } from "./services/home.service";
 import {ProductsService} from "./services/products.service";
 import MongoMemoryServer from "mongodb-memory-server-core/lib/MongoMemoryServer";
+import {DbMock} from "./tests/utils/dbmock";
 
 // Load config
 ProcessConfigLoader.Load("/dist/.env");
@@ -19,13 +20,8 @@ const container = new Container();
 container.bind<HomeService>(TYPES.HomeService).to(HomeService);
 container.bind<ProductsService>(TYPES.ProductsService).to(ProductsService);
 
-process.env.DB_CONN_STR = `mongodb://${process.env.DB_IP}:${process.env.DB_PORT}/${process.env.DB_DB_NAME}`;
-const mongod = new MongoMemoryServer({instance: {
-        dbName: process.env.DB_DB_NAME,
-        ip: process.env.DB_IP,
-        port: parseInt(process.env.DB_PORT, 10),
-    }});
-DbConnection.initConnection(process.env.DB_CONN_STR).then(() => {
+const mongod = DbMock.initDbMock();
+DbConnection.initConnection().then(() => {
     // start the server
     const server = new InversifyExpressServer(container);
 

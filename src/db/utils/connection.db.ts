@@ -4,7 +4,6 @@ export class DbConnection {
     public static async initConnection() {
         process.env.DB_CONN_STR = `mongodb://${process.env.DB_IP}:${process.env.DB_PORT}/${process.env.DB_DB_NAME}`;
         await DbConnection.connect(process.env.DB_CONN_STR);
-        mongoose.connection.on("disconnected", () => DbConnection.connect(process.env.DB_CONN_STR));
     }
 
     public static async connect(connStr: string) {
@@ -19,6 +18,10 @@ export class DbConnection {
                 console.error("Error connecting to database: ", error);
                 return process.exit(1);
             });
+    }
+
+    public static setAutoReconnect() {
+        mongoose.connection.on("disconnected", () => DbConnection.connect(process.env.DB_CONN_STR));
     }
 
     public static async disconnect() {

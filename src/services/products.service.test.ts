@@ -2,7 +2,6 @@ import "reflect-metadata";
 import {ProductsService} from "./products.service";
 import MongoMemoryServer from "mongodb-memory-server-core/lib/MongoMemoryServer";
 import "jest";
-import {DbConnection} from "../db/utils/connection.db";
 import Product, {IProduct} from "../db/models/product.db.model";
 import {DbMock} from "../tests/utils/dbmock";
 
@@ -10,14 +9,11 @@ describe("Products service", async () => {
     let mongod: MongoMemoryServer;
 
     beforeAll(async () => {
-        mongod = DbMock.initDbMock();
-        const uri = await mongod.getUri();
-        await DbConnection.connect(uri);
+        mongod = await DbMock.initDbMock();
     });
 
     afterAll(async () => {
-        await DbConnection.disconnect();
-        await mongod.stop();
+        await DbMock.stopDbMock();
     });
 
     // Before each method we need to truncate all products from db

@@ -14,20 +14,21 @@ ProcessConfigLoader.Load("/dist/.env");
 // load everything needed to the Container
 const container = ContainerConfigLoader.Load();
 
-const mongod = DbMock.initDbMock();
-DbConnection.initConnection().then(() => {
-    // start the server
-    const server = new InversifyExpressServer(container);
+// If running a real mongodb instance - use DbConnection.initConnection() instead of DbMock.initDbMock()
+DbMock.initDbMock().then((mongod) => {
+        DbConnection.setAutoReconnect();
 
-    server.setConfig((app) => {
-        app.use(bodyParser.urlencoded({
-            extended: true,
-        }));
-        app.use(bodyParser.json());
-    });
+        // start the server
+        const server = new InversifyExpressServer(container);
 
-    const serverInstance = server.build();
-    serverInstance.listen(process.env.PORT);
+        server.setConfig((app) => {
+            app.use(bodyParser.urlencoded({
+                extended: true,
+            }));
+            app.use(bodyParser.json());
+        });
+
+        const serverInstance = server.build();
+        serverInstance.listen(process.env.PORT);
+        console.log(`Server started on port ${process.env.PORT} :)`);
 });
-
-console.log(`Server started on port ${process.env.PORT} :)`);

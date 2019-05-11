@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "webpack --config webpack.dev.config.js",
     "prod": "webpack --config webpack.prod.config.js",
-    "test": "jest"
+    "test": "jest",
+    "start": "node dist\\bundle.js"
   },
   "author": "",
   "license": "ISC",
@@ -27,7 +28,7 @@
     "jest": "~24.8.0",
     "mongodb-memory-server-core": "~5.1.0",
     "ts-jest": "~24.0.2",
-    "ts-loader": "~6.0.0",
+    "ts-loader": "^6.0.0",
     "typescript": "~3.4.5",
     "webpack": "~4.31.0",
     "webpack-cli": "~3.3.2"

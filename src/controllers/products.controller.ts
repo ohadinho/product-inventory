@@ -21,7 +21,7 @@ export class ProductsController extends BaseHttpController {
     @httpGet("/:id")
     public async getProduct(req: express.Request, res: express.Response, next: express.NextFunction): Promise<JsonResult> {
         const content = await this.productsService.getProduct(req.params.id);
-        const statusCode = 403;
+        const statusCode = 200;
         return this.json(content, statusCode);
     }
 
